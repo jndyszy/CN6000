@@ -1,0 +1,100 @@
+# ============================================================
+# docker-compose.yml — CN6000 全栈部署
+# 环境：AWS t3.micro (Ubuntu) | 公网 IP: 18.141.229.33
+#
+# 服务：
+#   frontend   — React/Vue SPA (Nginx, port 80)
+#   app        — Go 后端 (port 8080，仅内网)
+#   postgres   — PostgreSQL 15 (仅内网)
+#   redis      — Redis 7 (仅内网)
+#
+# 目录结构（与本文件同级）：
+#   docker-compose.yml
+#   .env                      ← 后端环境变量
+#   init.sql                  ← 数据库初始化脚本
+#   frontend/
+#     ├── Dockerfile
+#     ├── nginx.conf
+#     └── ...（前端源码）
+#   backend/
+#     ├── Dockerfile
+#     ├── go.mod / go.sum
+#     └── ...（后端源码）
+#
+# 首次部署：
+#   docker compose up -d --build
+# ============================================================
+
+services:
+
+  # ── Frontend — React/Vue SPA served by Nginx ────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"               # 公网 HTTP 入口
+    depends_on:
+      - app
+
+  # ── Backend — Go App ─────────────────────────────────────────
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: app
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080" # 仅内网，由 Nginx 反代访问
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: host=postgres user=admin password=admin dbname=postgres port=5432 sslmode=disable TimeZone=UTC
+      REDIS_ADDR:   redis:6379
+    volumes:
+      - uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+
+  # ── PostgreSQL 15 ────────────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgresql
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB:       postgres
+      TZ:                Asia/Shanghai
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── Redis 7 ──────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
+  redisdata:
+  uploads:

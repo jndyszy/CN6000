@@ -1,0 +1,24 @@
+# 环境变量（含密钥，绝对不提交）
+.env
+*.env
+
+# Go 编译产物
+/my-backend
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# 上传的图片文件（本地存储，不进仓库）
+uploads/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# macOS
+.DS_Store

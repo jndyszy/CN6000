@@ -1,0 +1,161 @@
+/*
+ * Responsive Layout
+ * Breakpoints:
+ *   Mobile  : ≤ 640px
+ *   Tablet  : 641px – 1024px
+ *   Desktop : ≥ 1025px
+ */
+
+/* ============================================================
+   Home — 3-column layout
+   ============================================================ */
+
+.home-layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.home-sidebar-left,
+.home-sidebar-right {
+  width: 260px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 76px;
+}
+
+.home-feed {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Tablet (≤1024px): hide right sidebar */
+@media (max-width: 1024px) {
+  .home-sidebar-right {
+    display: none;
+  }
+}
+
+/* Mobile (≤680px): hide left sidebar, reduce padding */
+@media (max-width: 680px) {
+  .home-sidebar-left {
+    display: none;
+  }
+  .home-layout {
+    padding: 10px 8px;
+    gap: 0;
+  }
+}
+
+
+/* ============================================================
+   Home — create post footer (tag + controls row)
+   ============================================================ */
+
+.post-footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.post-tag-input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 13px;
+  outline: none;
+  color: #6b7280;
+}
+
+.post-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Mobile: tag input moves to its own row */
+@media (max-width: 520px) {
+  .post-footer {
+    flex-wrap: wrap;
+  }
+  .post-tag-input {
+    width: 100%;
+    flex: none;
+    order: 1;
+  }
+  .post-controls {
+    order: 2;
+    margin-left: auto;
+  }
+}
+
+/* ============================================================
+   Auth pages (Login / Register / ForgotPassword / ResetPassword)
+   ============================================================ */
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f4f5f7;
+  position: relative;
+  padding: 16px;
+}
+
+.auth-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Mobile: full-screen card */
+@media (max-width: 480px) {
+  .auth-page {
+    padding: 0;
+    align-items: stretch;
+  }
+  .auth-card {
+    border-radius: 0;
+    box-shadow: none;
+    padding: 36px 20px;
+    min-height: 100vh;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+/* ============================================================
+   General page body containers
+   ============================================================ */
+
+/* Single-column pages (UserProfile, Search, EditProfile, TagPosts) */
+@media (max-width: 480px) {
+  .page-body {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}
+
+/* ============================================================
+   Header — tighter on mobile
+   ============================================================ */
+
+@media (max-width: 400px) {
+  /* Compress header buttons on very small phones */
+  .home-header-search-text {
+    display: none;
+  }
+}

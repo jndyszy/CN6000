@@ -52,6 +52,44 @@
 
 
 /* ============================================================
+   Admin dashboard — 2-column layout (sidebar stacks on mobile
+   instead of hiding, since it's the only navigation)
+   ============================================================ */
+
+.admin-layout {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.admin-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 76px;
+}
+
+.admin-content {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 680px) {
+  .admin-layout {
+    flex-direction: column;
+    padding: 10px 8px;
+    gap: 12px;
+  }
+  .admin-sidebar {
+    width: 100%;
+    position: static;
+  }
+}
+
+/* ============================================================
    Home — create post footer (tag + controls row)
    ============================================================ */
 

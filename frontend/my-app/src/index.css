@@ -38,3 +38,7 @@ button {
 input, textarea, select {
   font-family: inherit;
 }
+
+@keyframes admin-spin {
+  to { transform: rotate(360deg); }
+}

@@ -1,8 +1,6 @@
 # CN6000 — Full-Stack Social Media Platform
 
-A full-stack social networking platform built with Go (backend) and React (frontend), deployed on AWS EC2 using Docker Compose.
-
-**Live Demo:** http://18.143.133.8
+A full-stack social networking platform built with Go (backend) and React (frontend), run locally via Docker Compose.
 
 ---
 
@@ -70,7 +68,7 @@ A full-stack social networking platform built with Go (backend) and React (front
 |-------------------|-----------------------------------|
 | Reverse Proxy     | Nginx (alpine)                    |
 | Containerization  | Docker Compose                    |
-| Platform          | AWS EC2 (Amazon Linux 2023)       |
+| Platform          | Local (Docker Desktop / Docker Engine) |
 
 ---
 
@@ -300,7 +298,7 @@ This starts 4 containers:
 
 ### 4. Open the App
 
-Navigate to `http://localhost` (or your server's IP/domain).
+Navigate to `http://localhost`.
 
 ### Useful Commands
 
@@ -330,7 +328,7 @@ docker compose up --build app -d
 | `JWT_SECRET`      | Yes      | Secret key for HS256 JWT signing                                        |
 | `GMAIL_FROM`      | Yes      | Gmail address used to send OTP emails                                   |
 | `GMAIL_PASSWORD`  | Yes      | Gmail App Password (not your regular password)                          |
-| `BASE_URL`        | Yes      | Public URL prefix for uploaded images (e.g. `http://18.143.133.8`)     |
+| `BASE_URL`        | Yes      | URL prefix for uploaded images (local deployment: `http://localhost`)   |
 | `DATABASE_URL`    | Auto     | Set by docker-compose; PostgreSQL connection string                     |
 | `REDIS_ADDR`      | Auto     | Set by docker-compose; Redis address (`redis:6379`)                     |
 | `UPLOAD_DIR`      | Optional | Upload directory path (defaults to `./uploads`)                         |
@@ -364,13 +362,7 @@ docker compose up --build app -d
 - Build stage: `node:22-alpine` — runs `npm ci` then `npm run build`
 - Runtime stage: `nginx:alpine` — serves static assets, proxies `/api/*` and `/uploads/*` to the backend
 
-### Production Checklist
-
-- [ ] Set a strong, random `JWT_SECRET`
-- [ ] Tighten CORS origins in the backend (currently allows `*`)
-- [ ] Point `BASE_URL` to your domain or IP
-- [ ] Configure DNS and add SSL/TLS (e.g., Certbot + Nginx)
-- [ ] Back up the `uploads` Docker volume regularly
+> This project currently runs locally only — see [部署指南.md](部署指南.md) for setup. If you deploy it publicly later, set a strong `JWT_SECRET`, tighten CORS, point `BASE_URL` at your domain/IP, add SSL/TLS, and back up the `uploads` volume.
 
 ---
 

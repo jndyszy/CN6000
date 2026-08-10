@@ -1,6 +1,6 @@
 # ============================================================
 # docker-compose.yml — CN6000 全栈部署
-# 环境：AWS t3.micro (Ubuntu) | 公网 IP: 18.141.229.33
+# 环境：本地开发机（Docker Desktop / Docker Engine）
 #
 # 服务：
 #   frontend   — React/Vue SPA (Nginx, port 80)

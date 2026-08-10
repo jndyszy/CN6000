@@ -10,7 +10,7 @@ import type { Post, UserCard, HotTag, RecommendedUser, Notification } from '../t
 
 function Home() {
   const navigate = useNavigate()
-  const { lang, t, toggle } = useLanguage()
+  const { lang, t } = useLanguage()
   const [userCard, setUserCard] = useState<UserCard | null>(null)
   const [posts, setPosts] = useState<Post[]>([])
   const [hotTags, setHotTags] = useState<HotTag[]>([])
@@ -186,19 +186,9 @@ function Home() {
       <header style={s.header}>
         <span style={s.logo}>{t('app.name')}</span>
         <div style={s.headerRight}>
-          {/* Language toggle */}
-          <button style={s.langBtn} onClick={toggle}>
-            <span style={lang === 'en' ? s.langActive : s.langInactive}>EN</span>
-            <span style={s.langSep}> | </span>
-            <span style={lang === 'zh' ? s.langActive : s.langInactive}>中文</span>
-          </button>
-          {isAdmin && (
-            <button style={s.searchBtn} onClick={() => navigate('/admin')}>🛠️ 管理后台</button>
-          )}
           <button style={s.searchBtn} onClick={() => navigate('/search')}>{t('nav.search')}</button>
           {userCard && (
             <>
-              <span className="home-username" style={{ ...s.headerUsername, cursor: 'pointer' }} onClick={() => navigate(`/users/${userCard.user_id}`)}>{userCard.username}</span>
               {/* 通知铃铛 */}
               <div ref={notifRef} style={{ position: 'relative' }}>
                 <button style={s.notifBtn} onClick={handleOpenNotif} title={t('notif.title')}>
@@ -249,7 +239,19 @@ function Home() {
                   </div>
                 )}
               </div>
-              <button style={s.logoutBtn} onClick={handleLogout}>{t('nav.logout')}</button>
+
+              {/* 用户名下拉菜单 */}
+              <div className="user-menu" tabIndex={0}>
+                <span className="home-username" style={{ ...s.headerUsername, cursor: 'pointer' }}>{userCard.username}</span>
+                <div className="user-menu-panel">
+                  <button className="user-menu-item" onClick={() => navigate('/settings')}>⚙️ {t('nav.settings')}</button>
+                  {isAdmin && (
+                    <button className="user-menu-item" onClick={() => navigate('/admin')}>🛠️ {t('nav.admin')}</button>
+                  )}
+                  <button className="user-menu-item" onClick={() => navigate(`/users/${userCard.user_id}`)}>👤 {t('nav.myProfile')}</button>
+                  <button className="user-menu-item danger" onClick={handleLogout}>🚪 {t('nav.logout')}</button>
+                </div>
+              </div>
             </>
           )}
         </div>
@@ -464,28 +466,6 @@ const s: Record<string, React.CSSProperties> = {
     color: '#374151',
     fontWeight: 500,
   },
-  langBtn: {
-    padding: '4px 10px',
-    background: '#f3f4f6',
-    border: '1px solid #e5e7eb',
-    borderRadius: '20px',
-    fontSize: '12px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '2px',
-  },
-  langActive: {
-    fontWeight: 700,
-    color: '#4f46e5',
-  },
-  langInactive: {
-    fontWeight: 400,
-    color: '#9ca3af',
-  },
-  langSep: {
-    color: '#d1d5db',
-  },
   searchBtn: {
     padding: '5px 14px',
     background: 'none',
@@ -599,15 +579,6 @@ const s: Record<string, React.CSSProperties> = {
     borderRadius: '50%',
     background: '#4f46e5',
     flexShrink: 0,
-  },
-  logoutBtn: {
-    padding: '5px 14px',
-    background: 'none',
-    border: '1px solid #e5e7eb',
-    borderRadius: '6px',
-    fontSize: '13px',
-    color: '#6b7280',
-    cursor: 'pointer',
   },
   fullLoading: {
     display: 'flex',

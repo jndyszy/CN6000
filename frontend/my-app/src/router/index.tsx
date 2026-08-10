@@ -8,6 +8,7 @@ import UserProfile from '../pages/UserProfile'
 import EditProfile from '../pages/EditProfile'
 import Search from '../pages/Search'
 import TagPosts from '../pages/TagPosts'
+import Settings from '../pages/Settings'
 import AdminDashboard from '../pages/admin/AdminDashboard'
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
@@ -34,6 +35,7 @@ function AppRouter() {
         <Route path="/profile/edit" element={<RequireAuth><EditProfile /></RequireAuth>} />
         <Route path="/search" element={<RequireAuth><Search /></RequireAuth>} />
         <Route path="/tags/:name" element={<RequireAuth><TagPosts /></RequireAuth>} />
+        <Route path="/settings" element={<RequireAuth><Settings /></RequireAuth>} />
         <Route path="/admin" element={<RequireAdmin><AdminDashboard /></RequireAdmin>} />
       </Routes>
     </BrowserRouter>

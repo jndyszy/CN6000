@@ -10,6 +10,14 @@ export const translations: Record<Lang, Translations> = {
     'nav.back': '← Back',
     'nav.search': '🔍 Search',
     'nav.logout': 'Log out',
+    'nav.settings': 'Settings',
+    'nav.myProfile': 'My profile',
+    'nav.admin': 'Admin',
+
+    // Settings
+    'settings.title': 'Settings',
+    'settings.language': 'Language',
+    'settings.editProfile': 'Edit profile',
 
     // Common
     'common.loading': 'Loading...',
@@ -215,6 +223,14 @@ export const translations: Record<Lang, Translations> = {
     'nav.back': '← 返回',
     'nav.search': '🔍 搜索',
     'nav.logout': '退出',
+    'nav.settings': '设置',
+    'nav.myProfile': '个人主页',
+    'nav.admin': '管理后台',
+
+    // Settings
+    'settings.title': '设置',
+    'settings.language': '语言',
+    'settings.editProfile': '编辑个人信息',
 
     // Common
     'common.loading': '加载中...',

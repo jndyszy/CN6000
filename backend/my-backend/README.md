@@ -1,4 +1,4 @@
-# CN6000 Social Platform — Backend
+# BlueNote (小蓝书) — Backend
 
 > RESTful API backend for a social media platform (Xiaohongshu-inspired), built with Go, Gin, PostgreSQL, and Redis.
 

@@ -1,4 +1,4 @@
-# CN6000 — Full-Stack Social Media Platform
+# BlueNote (小蓝书) — Full-Stack Social Media Platform
 
 A full-stack social networking platform built with Go (backend) and React (frontend), run locally via Docker Compose.
 

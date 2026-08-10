@@ -4,7 +4,7 @@ type Translations = Record<string, string>
 export const translations: Record<Lang, Translations> = {
   en: {
     // App
-    'app.name': 'Social Circle',
+    'app.name': 'BlueNote',
 
     // Navigation
     'nav.back': '← Back',
@@ -209,7 +209,7 @@ export const translations: Record<Lang, Translations> = {
 
   zh: {
     // App
-    'app.name': '社交圈',
+    'app.name': '小蓝书',
 
     // Navigation
     'nav.back': '← 返回',

@@ -1,4 +1,4 @@
-# CN6000 Social Platform — Frontend
+# BlueNote (小蓝书) — Frontend
 
 ## Overview
 

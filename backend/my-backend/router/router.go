@@ -104,6 +104,32 @@ func SetupRouter() *gin.Engine {
 		upload := authorized.Group("")
 		upload.Use(middleware.RateLimitMiddleware("ratelimit:upload:", 10, time.Minute))
 		upload.POST("/upload/image", controller.UploadImage)
+
+		// ===== 管理后台（需要 admin / super_admin 角色）=====
+		admin := authorized.Group("/admin")
+		admin.Use(middleware.RequireAdmin())
+		{
+			admin.GET("/reports", controller.ListReports)
+			admin.POST("/reports/:id/resolve", controller.ResolveReport)
+
+			admin.GET("/users", controller.ListUsersAdmin)
+			admin.POST("/users/:id/ban", controller.BanUser)
+			admin.POST("/users/:id/unban", controller.UnbanUser)
+			admin.POST("/users/:id/restrict", controller.RestrictUser)
+			admin.POST("/users/:id/unrestrict", controller.UnrestrictUser)
+			admin.DELETE("/users/:id", controller.AdminDeleteUser)
+
+			admin.DELETE("/posts/:id", controller.AdminDeletePost)
+			admin.DELETE("/comments/:id", controller.AdminDeleteComment)
+
+			// 管理员任免：仅超级管理员可操作
+			superAdmin := admin.Group("")
+			superAdmin.Use(middleware.RequireSuperAdmin())
+			{
+				superAdmin.POST("/users/:id/promote", controller.PromoteToAdmin)
+				superAdmin.POST("/users/:id/demote", controller.DemoteAdmin)
+			}
+		}
 	}
 
 	return r

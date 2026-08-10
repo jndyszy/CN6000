@@ -177,6 +177,8 @@ function Home() {
   }
 
   const currentUserId = userCard?.user_id ?? ''
+  const currentUserRole = JSON.parse(localStorage.getItem('user') || '{}').role
+  const isAdmin = currentUserRole === 'admin' || currentUserRole === 'super_admin'
 
   return (
     <div style={s.page}>
@@ -190,6 +192,9 @@ function Home() {
             <span style={s.langSep}> | </span>
             <span style={lang === 'zh' ? s.langActive : s.langInactive}>中文</span>
           </button>
+          {isAdmin && (
+            <button style={s.searchBtn} onClick={() => navigate('/admin')}>🛠️ 管理后台</button>
+          )}
           <button style={s.searchBtn} onClick={() => navigate('/search')}>{t('nav.search')}</button>
           {userCard && (
             <>

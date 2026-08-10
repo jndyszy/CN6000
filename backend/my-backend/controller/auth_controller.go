@@ -53,6 +53,8 @@ func Login(c *gin.Context) {
 		switch {
 		case errors.Is(err, service.ErrInvalidCredentials):
 			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		case errors.Is(err, service.ErrAccountBanned):
+			c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
 		default:
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "服务器内部错误"})
 		}
@@ -67,6 +69,7 @@ func Login(c *gin.Context) {
 			"username":        result.User.Username,
 			"email":           result.User.Email,
 			"profile_picture": result.User.ProfilePicture,
+			"role":            result.User.Role,
 		},
 	})
 }

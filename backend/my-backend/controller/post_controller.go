@@ -158,6 +158,11 @@ func GetMorePosts(c *gin.Context) {
 func CreatePost(c *gin.Context) {
 	userID := currentUserID(c)
 
+	if c.GetBool("is_post_restricted") {
+		c.JSON(http.StatusForbidden, gin.H{"error": "您已被限制发布内容，如有疑问请联系管理员"})
+		return
+	}
+
 	var req service.CreatePostRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -338,6 +343,12 @@ func GetComments(c *gin.Context) {
 
 func CreateComment(c *gin.Context) {
 	userID := currentUserID(c)
+
+	if c.GetBool("is_post_restricted") {
+		c.JSON(http.StatusForbidden, gin.H{"error": "您已被限制发布内容，如有疑问请联系管理员"})
+		return
+	}
+
 	postID, ok := parseUUID(c, "id")
 	if !ok {
 		return

@@ -27,6 +27,7 @@ var (
 	ErrOTPRateLimit       = errors.New("发送过于频繁，请 1 分钟后再试")
 	ErrInvalidOTP         = errors.New("验证码错误或已过期")
 	ErrUserNotFound       = errors.New("用户不存在")
+	ErrAccountBanned      = errors.New("账号已被封禁")
 )
 
 // ========== 请求结构体（绑定 + 校验规则写在这里，controller 直接 ShouldBindJSON） ==========
@@ -108,6 +109,9 @@ func Login(req LoginRequest) (*LoginResult, error) {
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(req.Password)); err != nil {
 		return nil, ErrInvalidCredentials
+	}
+	if user.IsBanned {
+		return nil, ErrAccountBanned
 	}
 
 	tokenStr, _, err := utils.GenerateToken(user.UserID.String(), user.Username)

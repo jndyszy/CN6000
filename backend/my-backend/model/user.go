@@ -15,6 +15,12 @@ type User struct {
 	PasswordHash   string    `gorm:"type:character varying(255);not null;column:password_hash"    json:"-"`
 	ProfilePicture string    `gorm:"type:character varying(500);column:profile_picture"           json:"profile_picture,omitempty"`
 	Bio            string    `gorm:"type:text;column:bio"                                   json:"bio,omitempty"`
+	// Role 三级角色：user（默认）| admin（管理员）| super_admin（超级管理员）
+	Role             string `gorm:"type:varchar(20);not null;default:'user';column:role"           json:"role"`
+	IsBanned         bool   `gorm:"not null;default:false;column:is_banned"                        json:"is_banned"`
+	BanReason        string `gorm:"type:text;column:ban_reason"                                    json:"ban_reason,omitempty"`
+	IsPostRestricted bool   `gorm:"not null;default:false;column:is_post_restricted"               json:"is_post_restricted"`
+	RestrictedReason string `gorm:"type:text;column:restricted_reason"                             json:"restricted_reason,omitempty"`
 	CreatedAt      time.Time `gorm:"autoCreateTime;column:created_at"                       json:"created_at"`
 	UpdatedAt      time.Time `gorm:"autoUpdateTime;column:updated_at"                       json:"updated_at"`
 }

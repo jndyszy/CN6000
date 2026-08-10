@@ -8,9 +8,17 @@ import UserProfile from '../pages/UserProfile'
 import EditProfile from '../pages/EditProfile'
 import Search from '../pages/Search'
 import TagPosts from '../pages/TagPosts'
+import AdminDashboard from '../pages/admin/AdminDashboard'
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   return localStorage.getItem('token') ? <>{children}</> : <Navigate to="/" replace />
+}
+
+function RequireAdmin({ children }: { children: React.ReactNode }) {
+  if (!localStorage.getItem('token')) return <Navigate to="/" replace />
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const isAdmin = user.role === 'admin' || user.role === 'super_admin'
+  return isAdmin ? <>{children}</> : <Navigate to="/home" replace />
 }
 
 function AppRouter() {
@@ -26,6 +34,7 @@ function AppRouter() {
         <Route path="/profile/edit" element={<RequireAuth><EditProfile /></RequireAuth>} />
         <Route path="/search" element={<RequireAuth><Search /></RequireAuth>} />
         <Route path="/tags/:name" element={<RequireAuth><TagPosts /></RequireAuth>} />
+        <Route path="/admin" element={<RequireAdmin><AdminDashboard /></RequireAdmin>} />
       </Routes>
     </BrowserRouter>
   )

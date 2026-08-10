@@ -6,13 +6,15 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 
 	"my-backend/conf"
+	"my-backend/dao"
 	"my-backend/utils"
 )
 
 // AuthMiddleware JWT 鉴权中间件
-// 校验流程：提取 Bearer Token → 解析验证签名与过期 → 检查 Redis 黑名单 → 注入用户信息至 Context
+// 校验流程：提取 Bearer Token → 解析验证签名与过期 → 检查 Redis 黑名单 → 查库校验封禁状态 → 注入用户信息至 Context
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
@@ -40,10 +42,32 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// 将完整 Claims 注入 Context，供后续 Handler 使用
+		// 查库获取用户当前状态：封号需要立即生效，不能只依赖签发时已过期的 JWT 信息
+		userID, err := uuid.Parse(claims.UserID)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "无效的认证信息"})
+			return
+		}
+		user, err := dao.GetUserByID(userID)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "服务器内部错误"})
+			return
+		}
+		if user == nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "用户不存在"})
+			return
+		}
+		if user.IsBanned {
+			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "账号已被封禁：" + user.BanReason})
+			return
+		}
+
+		// 将完整 Claims 及当前角色/限制状态注入 Context，供后续 Handler 使用
 		c.Set("user_id", claims.UserID)
 		c.Set("username", claims.Username)
 		c.Set("claims", claims)
+		c.Set("role", user.Role)
+		c.Set("is_post_restricted", user.IsPostRestricted)
 		c.Next()
 	}
 }

@@ -5,6 +5,7 @@ export interface User {
   username: string
   email: string
   profile_picture: string
+  role: 'user' | 'admin' | 'super_admin'
 }
 
 export interface LoginResponse {

@@ -47,8 +47,25 @@ func InitDB() {
 	migrateSchema(db)
 	rebuildViews(db)
 	rebuildTrigger(db)
+	promoteConfiguredAdmin(db)
 
 	log.Println("[DB] PostgreSQL 初始化成功")
+}
+
+// promoteConfiguredAdmin 每次启动时，把 ADMIN_EMAIL 环境变量指定邮箱的用户提升为 super_admin。
+// 未设置该环境变量，或该邮箱尚未注册时静默跳过；已注册后重启一次即可生效。
+func promoteConfiguredAdmin(db *gorm.DB) {
+	email := os.Getenv("ADMIN_EMAIL")
+	if email == "" {
+		return
+	}
+	result := db.Exec(`UPDATE users SET role = 'super_admin' WHERE email = ? AND role <> 'super_admin'`, email)
+	if result.Error != nil {
+		log.Fatalf("[DB] 提升超级管理员失败: %v", result.Error)
+	}
+	if result.RowsAffected > 0 {
+		log.Printf("[DB] 已将 %s 提升为超级管理员\n", email)
+	}
 }
 
 // migrateSchema 在 init.sql 之外增量添加新字段/新表（幂等，使用 IF NOT EXISTS）
@@ -84,6 +101,20 @@ func migrateSchema(db *gorm.DB) {
 			created_at  TIMESTAMPTZ DEFAULT NOW(),
 			CONSTRAINT uq_reports_unique UNIQUE (reporter_id, target_id, target_type)
 		)`,
+
+		// reports 表：管理员处理状态（举报审核后台用）
+		`ALTER TABLE reports ADD COLUMN IF NOT EXISTS status VARCHAR(20) NOT NULL DEFAULT 'pending'`,
+		`ALTER TABLE reports ADD COLUMN IF NOT EXISTS resolved_by UUID`,
+		`ALTER TABLE reports ADD COLUMN IF NOT EXISTS resolved_at TIMESTAMPTZ`,
+		`CREATE INDEX IF NOT EXISTS idx_reports_status ON reports (status, created_at DESC)`,
+
+		// users 表：管理后台需要的角色与封禁/限制发帖字段
+		`ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR(20) NOT NULL DEFAULT 'user'`,
+		`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_banned BOOLEAN NOT NULL DEFAULT FALSE`,
+		`ALTER TABLE users ADD COLUMN IF NOT EXISTS ban_reason TEXT`,
+		`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_post_restricted BOOLEAN NOT NULL DEFAULT FALSE`,
+		`ALTER TABLE users ADD COLUMN IF NOT EXISTS restricted_reason TEXT`,
+		`CREATE INDEX IF NOT EXISTS idx_users_role ON users (role) WHERE role <> 'user'`,
 	}
 
 	for _, sql := range sqls {

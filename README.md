@@ -264,7 +264,7 @@ PostgreSQL / Redis
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/jndyszy/CN6000.git
+git clone https://github.com/jndyszy/bluenote.git
 cd CN6000
 ```
 

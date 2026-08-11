@@ -76,6 +76,7 @@ function Search() {
         <button style={s.backBtn} onClick={() => navigate(-1)}>
           {t('nav.back')}
         </button>
+        <span style={s.logo}>{t('app.name')}</span>
         <span style={s.headerTitle}>{t('search.title')}</span>
       </header>
 
@@ -214,6 +215,9 @@ const s: Record<string, React.CSSProperties> = {
     background: 'none', border: 'none',
     fontSize: '14px', color: '#6b7280',
     cursor: 'pointer', padding: '4px 8px',
+  },
+  logo: {
+    fontSize: '16px', fontWeight: 700, color: '#4f46e5',
   },
   headerTitle: {
     fontSize: '16px', fontWeight: 600, color: '#1a1a1a',

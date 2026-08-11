@@ -66,6 +66,7 @@ function TagPosts() {
     <div style={s.page}>
       <header style={s.header}>
         <button style={s.backBtn} onClick={() => navigate(-1)}>{t('nav.back')}</button>
+        <span style={s.logo}>{t('app.name')}</span>
         <span style={s.tag}>#{name}</span>
       </header>
 
@@ -92,7 +93,8 @@ const s: Record<string, React.CSSProperties> = {
     display: 'flex', alignItems: 'center', gap: '12px',
   },
   backBtn: { background: 'none', border: 'none', fontSize: '14px', color: '#6b7280', cursor: 'pointer', padding: '4px 8px' },
-  tag: { fontSize: '16px', fontWeight: 700, color: '#4f46e5' },
+  logo: { fontSize: '16px', fontWeight: 700, color: '#4f46e5' },
+  tag: { fontSize: '16px', fontWeight: 700, color: '#1a1a1a' },
   body: { maxWidth: '680px', margin: '0 auto', padding: '16px' },
   hint: { textAlign: 'center', color: '#9ca3af', fontSize: '14px', padding: '32px' },
 }

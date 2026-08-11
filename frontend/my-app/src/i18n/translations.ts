@@ -155,7 +155,6 @@ export const translations: Record<Lang, Translations> = {
     'search.allLoaded': 'All results loaded',
 
     // Profile
-    'profile.edit': 'Edit profile',
     'profile.editTitle': 'Edit Profile',
     'profile.follow': 'Follow',
     'profile.following': 'Following',
@@ -368,7 +367,6 @@ export const translations: Record<Lang, Translations> = {
     'search.allLoaded': '已加载全部结果',
 
     // Profile
-    'profile.edit': '编辑资料',
     'profile.editTitle': '编辑资料',
     'profile.follow': '关注',
     'profile.following': '已关注',

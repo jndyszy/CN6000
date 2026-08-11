@@ -124,7 +124,7 @@ function EditProfile() {
       })
       const updated = { ...currentUser, ...data.user }
       localStorage.setItem('user', JSON.stringify(updated))
-      navigate(`/users/${currentUser.user_id}`, { replace: true })
+      navigate('/settings', { replace: true })
     } catch (err) {
       setError(err instanceof Error ? err.message : t('profile.saveFailed'))
     } finally {
@@ -155,6 +155,7 @@ function EditProfile() {
     <div style={s.page}>
       <header style={s.header}>
         <button style={s.backBtn} onClick={() => navigate(-1)}>{t('nav.back')}</button>
+        <span style={s.logo}>{t('app.name')}</span>
         <span style={s.title}>{t('profile.editTitle')}</span>
       </header>
 
@@ -343,6 +344,7 @@ const s: Record<string, React.CSSProperties> = {
     display: 'flex', alignItems: 'center', gap: '12px',
   },
   backBtn: { background: 'none', border: 'none', fontSize: '14px', color: '#6b7280', cursor: 'pointer', padding: '4px 8px' },
+  logo: { fontSize: '16px', fontWeight: 700, color: '#4f46e5' },
   title: { fontSize: '16px', fontWeight: 600, color: '#1a1a1a' },
   body: { maxWidth: '480px', margin: '0 auto', padding: '24px 16px' },
   form: { background: '#fff', borderRadius: '10px', padding: '24px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', display: 'flex', flexDirection: 'column', gap: '20px' },

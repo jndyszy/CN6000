@@ -51,6 +51,7 @@ function ResetPassword() {
       <div className="auth-page">
         {LangToggle}
         <div className="auth-card">
+          <div style={s.logo}>{t('app.name')}</div>
           <p style={{ textAlign: 'center', color: '#555', fontSize: '14px' }}>
             {t('auth.pageExpired')}
             <Link to="/forgot-password" style={s.link}> {t('auth.forgotPasswordLink')}</Link>
@@ -64,6 +65,7 @@ function ResetPassword() {
     <div className="auth-page">
       {LangToggle}
       <div className="auth-card">
+        <div style={s.logo}>{t('app.name')}</div>
         <h2 style={s.title}>{t('auth.resetPasswordTitle')}</h2>
         <p style={s.desc}>{t('auth.codeSentTo')}<br /><strong>{email}</strong></p>
 
@@ -147,6 +149,13 @@ const s: Record<string, React.CSSProperties> = {
   },
   langSep: {
     color: '#d1d5db',
+  },
+  logo: {
+    margin: '0 0 6px',
+    fontSize: '20px',
+    fontWeight: 700,
+    color: '#4f46e5',
+    textAlign: 'center',
   },
   title: {
     margin: '0 0 8px',

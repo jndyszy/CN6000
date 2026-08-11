@@ -210,7 +210,7 @@ function AdminDashboard() {
   return (
     <div style={s.page}>
       <header style={s.header}>
-        <button style={s.backBtn} onClick={() => navigate('/home')}>← 返回</button>
+        <button style={s.backBtn} onClick={() => navigate(-1)}>← 返回</button>
         <span style={s.logo}>BlueNote</span>
         <span style={s.headerTitle}>管理后台</span>
       </header>

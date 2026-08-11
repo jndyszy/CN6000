@@ -42,6 +42,7 @@ function Register() {
         <span style={lang === 'zh' ? s.langActive : s.langInactive}>中文</span>
       </button>
       <div className="auth-card">
+        <div style={s.logo}>{t('app.name')}</div>
         <h2 style={s.title}>{t('auth.register')}</h2>
 
         <form onSubmit={handleSubmit} style={s.form}>
@@ -123,6 +124,13 @@ const s: Record<string, React.CSSProperties> = {
   },
   langSep: {
     color: '#d1d5db',
+  },
+  logo: {
+    margin: '0 0 6px',
+    fontSize: '20px',
+    fontWeight: 700,
+    color: '#4f46e5',
+    textAlign: 'center',
   },
   title: {
     margin: '0 0 24px',

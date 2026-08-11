@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { getUserProfile, getFollowing, getFollowers, followUser, unfollowUser } from '../api/users'
 import PostCard from '../components/PostCard'
 import { useLanguage } from '../context/LanguageContext'
@@ -119,17 +119,17 @@ function UserProfile() {
     <div style={s.page}>
       <header style={s.header}>
         <button style={s.backBtn} onClick={() => navigate(-1)}>{t('nav.back')}</button>
+        <span style={s.logo}>{t('app.name')}</span>
         <span style={s.headerTitle}>{profile.username}</span>
-        {isOwn
-          ? <Link to="/profile/edit" style={s.actionBtn}>{t('profile.edit')}</Link>
-          : <button
-              style={{ ...s.actionBtn, ...(isFollowing ? s.followingStyle : s.followStyle) }}
-              disabled={followLoading}
-              onClick={handleFollow}
-            >
-              {isFollowing ? t('profile.following') : t('profile.follow')}
-            </button>
-        }
+        {!isOwn && (
+          <button
+            style={{ ...s.actionBtn, ...(isFollowing ? s.followingStyle : s.followStyle) }}
+            disabled={followLoading}
+            onClick={handleFollow}
+          >
+            {isFollowing ? t('profile.following') : t('profile.follow')}
+          </button>
+        )}
       </header>
 
       <div className="page-body" style={s.body}>
@@ -217,6 +217,7 @@ const s: Record<string, React.CSSProperties> = {
     display: 'flex', alignItems: 'center', gap: '12px',
   },
   backBtn: { background: 'none', border: 'none', fontSize: '14px', color: '#6b7280', cursor: 'pointer', padding: '4px 8px' },
+  logo: { fontSize: '16px', fontWeight: 700, color: '#4f46e5' },
   headerTitle: { flex: 1, fontSize: '16px', fontWeight: 600, color: '#1a1a1a' },
   actionBtn: {
     padding: '6px 16px', borderRadius: '6px', fontSize: '13px', fontWeight: 500,
